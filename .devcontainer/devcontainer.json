@@ -1,0 +1,21 @@
+{
+    "name": "Kubernetes Lab Environment",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest",
+            "moby": false
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    },
+    "updateContentCommand": "sudo curl -LO 'https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl' && sudo chmod +x kubectl && sudo mv kubectl /usr/local/bin/ && sudo curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64 && sudo chmod +x /usr/local/bin/kind",
+    
+    "postStartCommand": "until docker info >/dev/null 2>&1; do echo 'Waiting for Docker...'; sleep 1; done; kind get clusters | grep -q lab-cluster || kind create cluster --name lab-cluster"
+}
