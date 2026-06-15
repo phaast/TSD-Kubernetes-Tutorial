@@ -75,9 +75,33 @@ Because you deleted the index file, the internal Nginx server started returning 
 
 ### Part 3: Testing Auto-Scaling (The Traffic Spike)
 
+Before creating the Autoscaler, make sure Kubernetes can read CPU usage. The Horizontal Pod Autoscaler needs Metrics Server. Without it, the HPA output may show `cpu: <unknown>/50%`.
+
+Install Metrics Server:
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+On Killercoda, Metrics Server may need an extra flag because of kubelet TLS certificate verification. Patch the deployment:
+
+```bash
+kubectl patch deployment metrics-server -n kube-system --type='json' -p='[
+  {"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}
+]'
+```
+Check if the Metrics API works:
+
+```bash
+kubectl top pods
+```
+
+If `kubectl top pods` shows `Metrics API not available`, wait a few seconds and run it again. Continue only when the command shows CPU and memory usage for the pods.
+
 Now let's configure the Autoscaler. We will tell Kubernetes to keep the CPU usage around 50%. If it goes higher, it can scale up to 10 pods.
 
 Create the HPA (Horizontal Pod Autoscaler):
+
 ```bash
 kubectl autoscale deployment tetris-prod --cpu-percent=50 --min=1 --max=10
 ```

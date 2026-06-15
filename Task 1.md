@@ -109,3 +109,7 @@ Why does this work?
 The Service `tetris-service` does not connect to a specific Pod IP. It connects to the label (`app: tetris`). When a Pod dies, the Service simply removes it from the list of active targets and sends traffic to the other two Pods. The game works without interruption because you are connecting to a "gateway" instead of a specific "room."
 
 This is the foundation of High Availability in Kubernetes!
+
+**How to get your points:**
+
+To get points for this task, show that the Service keeps the game available after a Pod failure.
