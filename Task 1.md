@@ -53,6 +53,10 @@ It is now possible to access Tetris! In Killercoda:
 - In the top-right corner, expand the `≡` button, go to `Traffic / Ports` and click on the `8080` port button.
 - You can try to play a few games 😎.
 
+Leave this terminal running with the tunnel open.
+
+Open a second terminal in Killercoda and use it for the next commands.
+
 Once you're finished - delete the Pod that the tunnel is connected to:
 
 ```bash
